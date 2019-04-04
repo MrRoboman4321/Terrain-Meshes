@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="SpatialMaterial" id=2]
+
+[sub_resource type="PlaneMesh" id=1]
+material = SubResource( 2 )
+
+[node name="Floor" type="Spatial"]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
