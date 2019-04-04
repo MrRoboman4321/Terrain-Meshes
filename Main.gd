@@ -1,12 +1,15 @@
 extends Spatial
 
 onready var meshInstance = $Mesh
+onready var cam = $Camera
 
 const SIZE = 20.0
 
+var deg = 0
+
 func _ready():
     var TerrainMesh = load("res://TerrainMesh.gd").TerrainMesh
-    var terrain = TerrainMesh.new(100.0)
+    var terrain = TerrainMesh.new(30.0)
     
     terrain.attachToMesh(meshInstance)
     
@@ -26,8 +29,13 @@ func map(x, x1, x2, y1, y2):
     
     return y1 + (scaled * rightSpan)
 
-#warning-ignore:unused_argument
+func _updateCamera(delta):
+    var x = 3*sqrt(20) * cos(delta * PI/4 + deg) + 10
+    var z = 3*sqrt(20) * sin(delta * PI/4 + deg) + 10
+    deg += delta * PI/4
+    
+    cam.set_translation(Vector3(x, 20, z))
+    cam.look_at(Vector3(10, 0, 10), Vector3(0, 1, 0))
+
 func _process(delta):
-    pass
-    #angle += delta * 30
-    #meshInstance.rotation_degrees = Vector3(0, 0, angle)
+    _updateCamera(delta)
