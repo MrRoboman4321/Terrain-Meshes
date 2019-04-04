@@ -1,6 +1,8 @@
 class TerrainMesh:
+    
+    #Constants to determine the width and depth in worldspace that the mesh should take up.
     const WIDTH = 20.0
-    const HEIGHT = 20.0
+    const DEPTH = 20.0
 
     var heights = []
     var material
@@ -17,11 +19,16 @@ class TerrainMesh:
         meshInstance.set_surface_material(0, material)
         
     func _meshFromHeights(heights, material, size):
+        #Create the tool for mesh generation
         var surfaceTool = SurfaceTool.new()
+        
+        #This will be a mesh of triangles
         surfaceTool.begin(Mesh.PRIMITIVE_TRIANGLES)
     
+        #Which direction is up
         surfaceTool.add_normal(Vector3(0, 0, 1))
         
+        #Used to find the min and max y, for use in scaling value over the y axis
         var min_y = 1000
         var max_y = -1000
         
@@ -32,37 +39,33 @@ class TerrainMesh:
                 if(heights[r][c] > max_y):
                     max_y = heights[r][c]
         
+        #Used to scale the x,z of vertices to fit within WIDTH,H
         var scale = WIDTH/size;
         
         for row in range(0, size):
             for col in range(0, size):
                 if(row != size - 1 and col != size - 1):
-                    #if(allBelowWater(heights[row][col], heights[row + 1][col], heights[row][col + 1], size)):
-                    #    surfaceTool.add_color(Color.blue)
-                    #else:
-                    #    surfaceTool.add_color(Color.red)
-    
                     var v = Vector3(row*scale, heights[row][col], col*scale)
                     surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
                     surfaceTool.add_vertex(v)
+                    
                     v = Vector3((row + 1)*scale, heights[row + 1][col], col*scale)
                     surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
                     surfaceTool.add_vertex(v)
+                    
                     v = Vector3(row*scale, heights[row][col + 1], (col + 1)*scale)
                     surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
                     surfaceTool.add_vertex(v)
                     
                 if(row != 0 and col != 0):
-                    #if(allBelowWater(heights[row][col], heights[row - 1][col], heights[row][col - 1], size)):
-                    #    surfaceTool.add_color(Color.blue)
-                    #else:
-                    #    surfaceTool.add_color(Color.red)
                     var v = Vector3(row*scale, heights[row][col], col*scale)
                     surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
                     surfaceTool.add_vertex(v)
+                    
                     v = Vector3((row - 1)*scale, heights[row - 1][col], col*scale)
                     surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
                     surfaceTool.add_vertex(v)
+                    
                     v = Vector3(row*scale, heights[row][col - 1], (col - 1)*scale)
                     surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
                     surfaceTool.add_vertex(v)
@@ -103,13 +106,7 @@ class TerrainMesh:
         
         #Side length is always 20
         var max_dist = sqrt(200.0) * 0.8
-        var s = max(1 - abs(Vector2(vert.x - WIDTH/2, vert.z - HEIGHT/2).length()/max_dist), 0)
-        
-        if(s < 0):
-            print("< 0")
-            print("len: " + str(Vector2(vert.x - WIDTH/2, vert.z - HEIGHT/2).length()/max_dist))
-        
-        #print(s)
+        var s = max(1 - abs(Vector2(vert.x - WIDTH/2, vert.z - DEPTH/2).length()/max_dist), 0)
         
         #Side length is always 20, so -10 in each direction to center
         var vec = Vector2(vert.x - 10, vert.z - 10).normalized()
