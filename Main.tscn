@@ -18,3 +18,12 @@ light_energy = 0.48
 light_indirect_energy = 1.13
 shadow_enabled = true
 
+[node name="debug" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="max_x" type="Label" parent="."]
+margin_top = 32.0
+margin_right = 40.0
+margin_bottom = 46.0
+

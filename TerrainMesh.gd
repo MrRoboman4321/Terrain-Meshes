@@ -18,6 +18,17 @@ class TerrainMesh:
         meshInstance.mesh = mesh
         meshInstance.set_surface_material(0, material)
         
+    func updateMesh(meshInstance):
+        mesh = _meshFromHeights(heights, material, heights.size())
+        meshInstance.mesh = mesh
+        meshInstance.set_surface_material(0, material)
+        
+    func updateVert(x, z, val):
+        heights[x][z] = val
+        
+    func getVert(x, z):
+        return heights[x][z]
+        
     func _meshFromHeights(heights, material, size):
         #Create the tool for mesh generation
         var surfaceTool = SurfaceTool.new()
@@ -77,6 +88,7 @@ class TerrainMesh:
     func _createMaterial():
         var mat = SpatialMaterial.new()
         mat.set("vertex_color_use_as_albedo", true)
+        mat.set_cull_mode(SpatialMaterial.CULL_DISABLED)
         
         return mat
     
@@ -112,7 +124,7 @@ class TerrainMesh:
         var vec = Vector2(vert.x - 10, vert.z - 10).normalized()
         var h = _map(atan2(vec.y, vec.x), -PI, PI, 0, 1)
         
-        return Color.from_hsv(h, s*2.5, v)
+        return Color.from_hsv(h, s * 2.5, v)
         
     func _saturationSigmoid(s):
         return (-1.0 / (0.97 + exp(-8*s + 4)) + 1)
