@@ -59,15 +59,15 @@ func _updateTerrain(time):
         max_x = min_x + 4
         
     if(split):
-        for x in range(int(round(min_x)), SIZE):
+        for x in range(int(ceil(min_x)), SIZE):
             for z in range(0, SIZE):
                 terrain.updateVert(x, z, home_heights[x][z] + _getWaveHeight(x - min_x))
                 
-        for x in range(0, int(round(max_x))):
+        for x in range(0, int(ceil(max_x))):
             for z in range(0, SIZE):
                 terrain.updateVert(x, z, home_heights[x][z] + _getWaveHeight(max_x - x))
     else:
-        for x in range(int(round(min_x)), int(round(max_x))):
+        for x in range(int(ceil(min_x)), int(ceil(max_x))):
             for z in range(0, SIZE):
                 $debug.text = str(_getWaveHeight(x - min_x))
                 terrain.updateVert(x, z, home_heights[x][z] + _getWaveHeight(x - min_x))
