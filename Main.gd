@@ -75,7 +75,7 @@ func _updateTerrain(time):
     terrain.updateMesh(meshInstance)
     
 func _getWaveHeight(x):
-    return -2 * pow((x - 2)*(sqrt(0.5)/2), 2) + 1
+    return -4 * pow((x - 2)*(sqrt(0.5)/2), 2) + 2
     
 func _deepCopyHeights(heights):
     var out = []
@@ -90,8 +90,9 @@ func _process(delta):
     time += delta
     
     #if(i % int(SIZE) == 0):
-    #_updateCamera(delta)
+    _updateCamera(delta)
     if(!first):
+        pass
         _updateTerrain(time)
         #first = !first
     

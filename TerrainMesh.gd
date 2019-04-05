@@ -12,14 +12,14 @@ class TerrainMesh:
         randomize()
         heights = _generateHeightSimplex(size)
         material = _createMaterial()
-        mesh = _meshFromHeights(heights, material, size)
+        mesh = _meshFromHeights(heights, size)
         
     func attachToMesh(meshInstance):
         meshInstance.mesh = mesh
         meshInstance.set_surface_material(0, material)
         
     func updateMesh(meshInstance):
-        mesh = _meshFromHeights(heights, material, heights.size())
+        mesh = _meshFromHeights(heights, heights.size())
         meshInstance.mesh = mesh
         meshInstance.set_surface_material(0, material)
         
@@ -29,7 +29,7 @@ class TerrainMesh:
     func getVert(x, z):
         return heights[x][z]
         
-    func _meshFromHeights(heights, material, size):
+    func _meshFromHeights(heights, size):
         #Create the tool for mesh generation
         var surfaceTool = SurfaceTool.new()
         
@@ -57,28 +57,28 @@ class TerrainMesh:
             for col in range(0, size):
                 if(row != size - 1 and col != size - 1):
                     var v = Vector3(row*scale, heights[row][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
+                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
                     surfaceTool.add_vertex(v)
                     
                     v = Vector3((row + 1)*scale, heights[row + 1][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
+                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
                     surfaceTool.add_vertex(v)
                     
                     v = Vector3(row*scale, heights[row][col + 1], (col + 1)*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
+                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
                     surfaceTool.add_vertex(v)
                     
                 if(row != 0 and col != 0):
                     var v = Vector3(row*scale, heights[row][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
+                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
                     surfaceTool.add_vertex(v)
                     
                     v = Vector3((row - 1)*scale, heights[row - 1][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
+                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
                     surfaceTool.add_vertex(v)
                     
                     v = Vector3(row*scale, heights[row][col - 1], (col - 1)*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y, size))
+                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
                     surfaceTool.add_vertex(v)
     
         surfaceTool.generate_normals()
@@ -113,7 +113,7 @@ class TerrainMesh:
             
         return heights
     
-    func _getVertexColor(vert, min_y, max_y, size):
+    func _getVertexColor(vert, min_y, max_y):
         var v = _map(vert.y, min_y, max_y, 0, 1)
         
         #Side length is always 20
