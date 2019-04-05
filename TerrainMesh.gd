@@ -53,36 +53,53 @@ class TerrainMesh:
         #Used to scale the x,z of vertices to fit within WIDTH,H
         var scale = WIDTH/size;
         
-        for row in range(0, size):
-            for col in range(0, size):
-                if(row != size - 1 and col != size - 1):
-                    var v = Vector3(row*scale, heights[row][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
-                    surfaceTool.add_vertex(v)
+        for row in range(1, size - 1):
+            for col in range(1, size - 1):
+                _drawDRTriangles(surfaceTool, row, col, scale, min_y, max_y)
+                _drawULTriangles(surfaceTool, row, col, scale, min_y, max_y)
+        for col in range(0, size - 1):
+            _drawDRTriangles(surfaceTool, 0, col, scale, min_y, max_y)
+            _drawULTriangles(surfaceTool, size - 1, col, scale, min_y, max_y)
+        for row in range(1, size - 1):
+            _drawDRTriangles(surfaceTool, row, 0, scale, min_y, max_y)
+            _drawULTriangles(surfaceTool, row, size - 1, scale, min_y, max_y)
+        
+        #for row in range(0, size):
+            #for col in range(0, size):
+                #if(row != size - 1 and col != size - 1):
+                    #_drawDRTriangles(surfaceTool, row, col, scale, min_y, max_y)
                     
-                    v = Vector3((row + 1)*scale, heights[row + 1][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
-                    surfaceTool.add_vertex(v)
-                    
-                    v = Vector3(row*scale, heights[row][col + 1], (col + 1)*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
-                    surfaceTool.add_vertex(v)
-                    
-                if(row != 0 and col != 0):
-                    var v = Vector3(row*scale, heights[row][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
-                    surfaceTool.add_vertex(v)
-                    
-                    v = Vector3((row - 1)*scale, heights[row - 1][col], col*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
-                    surfaceTool.add_vertex(v)
-                    
-                    v = Vector3(row*scale, heights[row][col - 1], (col - 1)*scale)
-                    surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
-                    surfaceTool.add_vertex(v)
+                #if(row != 0 and col != 0):
+                    #_drawULTriangles(surfaceTool, row, col, scale, min_y, max_y)
     
         surfaceTool.generate_normals()
         return surfaceTool.commit()
+        
+    func _drawDRTriangles(surfaceTool, row, col, scale, min_y, max_y):
+        var v = Vector3(row*scale, heights[row][col], col*scale)
+        surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
+        surfaceTool.add_vertex(v)
+        
+        v = Vector3((row + 1)*scale, heights[row + 1][col], col*scale)
+        surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
+        surfaceTool.add_vertex(v)
+        
+        v = Vector3(row*scale, heights[row][col + 1], (col + 1)*scale)
+        surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
+        surfaceTool.add_vertex(v)
+        
+    func _drawULTriangles(surfaceTool, row, col, scale, min_y, max_y):
+        var v = Vector3(row*scale, heights[row][col], col*scale)
+        surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
+        surfaceTool.add_vertex(v)
+        
+        v = Vector3((row - 1)*scale, heights[row - 1][col], col*scale)
+        surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
+        surfaceTool.add_vertex(v)
+        
+        v = Vector3(row*scale, heights[row][col - 1], (col - 1)*scale)
+        surfaceTool.add_color(_getVertexColor(v, min_y, max_y))
+        surfaceTool.add_vertex(v)
         
         
     func _createMaterial():

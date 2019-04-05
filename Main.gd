@@ -3,16 +3,14 @@ extends Spatial
 onready var meshInstance = $Mesh
 onready var cam = $Camera
 
-const SIZE = 20.0
-const SPEED = 4.0 #How long it takes the wave to propogate across the mesh
+const SIZE = 50.0
+const SPEED = 100.0 #How long it takes the wave to propogate across the mesh
 
 var deg = 0
 var i = 0
 var time = 0
 var terrain
 var home_heights
-
-var first = false
 
 func _ready():
     var TerrainMesh = load("res://TerrainMesh.gd").TerrainMesh
@@ -58,6 +56,9 @@ func _updateTerrain(time):
     else:
         max_x = min_x + 4
         
+    min_x = _map(min_x, 0, 20, 0, SIZE)
+    max_x = _map(max_x, 0, 20, 0, SIZE)
+        
     if(split):
         for x in range(int(ceil(min_x)), SIZE):
             for z in range(0, SIZE):
@@ -75,6 +76,7 @@ func _updateTerrain(time):
     terrain.updateMesh(meshInstance)
     
 func _getWaveHeight(x):
+    x = _map(x, 0, 0.2*SIZE, 0, 4)
     return -4 * pow((x - 2)*(sqrt(0.5)/2), 2) + 2
     
 func _deepCopyHeights(heights):
@@ -85,15 +87,19 @@ func _deepCopyHeights(heights):
             out[x].append(heights[x][z])
             
     return out
+    
+func _map(x, x1, x2, y1, y2):
+        var leftSpan = x2 - x1
+        var rightSpan = y2 - y1
+        
+        var scaled = (x - x1)/(leftSpan)
+        
+        return y1 + (scaled * rightSpan)
               
 func _process(delta):
     time += delta
     
-    #if(i % int(SIZE) == 0):
-    _updateCamera(delta)
-    if(!first):
-        pass
-        _updateTerrain(time)
-        #first = !first
+    #_updateCamera(delta)
+    _updateTerrain(time)
     
     i += 1
