@@ -110,6 +110,6 @@ func _process(delta):
     #home_heights[SIZE - 1][0] = 0
     print(home_heights[SIZE - 1][0])
     
-    get_node("RigidBody5/MeshInstance").mesh.surface_get_material(0).set_shader_param("Threshold", (sin(time) + 1)/2)
+    get_node("CollidingBox/RigidBody/MeshInstance").mesh.surface_get_material(0).set_shader_param("Threshold", (sin(time) + 1)/2)
     
     i += 1

@@ -6,3 +6,7 @@ class FPS:
     
     func _init():
         pass
+        
+    func update(delta):
+        deltas.append(delta)
+        #if(deltas.length() > 10):
