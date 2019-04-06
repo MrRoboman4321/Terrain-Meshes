@@ -63,16 +63,9 @@ class TerrainMesh:
         for row in range(1, size - 1):
             _drawDRTriangles(surfaceTool, row, 0, scale, min_y, max_y)
             _drawULTriangles(surfaceTool, row, size - 1, scale, min_y, max_y)
-        
-        #for row in range(0, size):
-            #for col in range(0, size):
-                #if(row != size - 1 and col != size - 1):
-                    #_drawDRTriangles(surfaceTool, row, col, scale, min_y, max_y)
-                    
-                #if(row != 0 and col != 0):
-                    #_drawULTriangles(surfaceTool, row, col, scale, min_y, max_y)
     
         surfaceTool.generate_normals()
+        surfaceTool.index()
         return surfaceTool.commit()
         
     func _drawDRTriangles(surfaceTool, row, col, scale, min_y, max_y):

@@ -1,16 +1,18 @@
 extends Spatial
 
-onready var meshInstance = $Mesh
+onready var meshInstance = $Terrain
 onready var cam = $Camera
 
-const SIZE = 50.0
-const SPEED = 100.0 #How long it takes the wave to propogate across the mesh
+const SIZE = 20.0
+const SPEED = 8.0 #How long it takes the wave to propogate across the mesh
 
 var deg = 0
 var i = 0
 var time = 0
 var terrain
 var home_heights
+
+var tex = NoiseTexture
 
 func _ready():
     var TerrainMesh = load("res://TerrainMesh.gd").TerrainMesh
@@ -74,6 +76,10 @@ func _updateTerrain(time):
                 terrain.updateVert(x, z, home_heights[x][z] + _getWaveHeight(x - min_x))
            
     terrain.updateMesh(meshInstance)
+    for child in meshInstance.get_children():
+        child.queue_free()
+        
+    meshInstance.create_trimesh_collision()
     
 func _getWaveHeight(x):
     x = _map(x, 0, 0.2*SIZE, 0, 4)
@@ -101,5 +107,9 @@ func _process(delta):
     
     #_updateCamera(delta)
     _updateTerrain(time)
+    #home_heights[SIZE - 1][0] = 0
+    print(home_heights[SIZE - 1][0])
+    
+    get_node("RigidBody5/MeshInstance").mesh.surface_get_material(0).set_shader_param("Threshold", (sin(time) + 1)/2)
     
     i += 1
